@@ -78,7 +78,8 @@ async function main() {
     //crawledObj[repoTopic] = collectedRepos
     core.info('collectedModels')
     core.info(collectedModels)
-    crawledObj[repoTopic].models = collectedModels
+    crawledObj.topic = repoTopic
+    crawledObj.models = collectedModels
     core.info('crawledObj')
     core.info(crawledObj)
     fs.writeFileSync('data.json', JSON.stringify(crawledObj, null, 2))
