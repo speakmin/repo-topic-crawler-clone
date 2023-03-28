@@ -58,7 +58,7 @@ async function main() {
             })
             core.info(`Found ${repoFile} in repository ${repo.name} with topic ${repoTopic}}`)
             // turn yaml into object
-            collectedRepos[repo.name] = JSON.parse(yaml.load(Buffer.from(response.content, {encoding: 'utf-8'})))
+            collectedRepos[repo.name] = JSON.parse(yaml.load(Buffer.from(response.content, {encoding: 'base64'})))
             core.info(`collectedRepos[repo.name]`)
             core.info(collectedRepos[repo.name])
             //for each model in collectedRepos[repo.name].models, add repo name to model
