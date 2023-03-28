@@ -58,8 +58,8 @@ async function main() {
             })
             core.info(`Found ${repoFile} in repository ${repo.name} with topic ${repoTopic}}`)
             collectedRepos[repo.name] = yaml.load(Buffer.from(response.content, 'base64').toString())
-            //for each model in collectedRepos[repo.name], add repo name to model
-            for (const model of collectedRepos[repo.name]) {
+            //for each model in collectedRepos[repo.name].models, add repo name to model
+            for (const model of collectedRepos[repo.name].models) {
                 model.repository = repo.name
                 collectedModels.push(model)
             }
