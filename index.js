@@ -37,6 +37,8 @@ async function main() {
     const repoTopic = core.getInput('repo_topic', {required: true, trimWhitespace: true})
     const repoFile = core.getInput('repo_file', {required: true, trimWhitespace: true})
     const collectedRepos = {}
+    // added collectedModels to generate a flat array of models to make React front end easier
+    const collectedModels = []
     let failed = false
     const client = await newClient(adminToken)
     const artifactClient = artifact.create()
@@ -56,6 +58,11 @@ async function main() {
             })
             core.info(`Found ${repoFile} in repository ${repo.name} with topic ${repoTopic}}`)
             collectedRepos[repo.name] = yaml.load(Buffer.from(response.content, 'base64').toString())
+            //for each model in collectedRepos[repo.name], add repo name to model
+            for (const model of collectedRepos[repo.name]) {
+                model.repository = repo.name
+                collectedModels.push(model)
+            }
         } catch (e) {
             core.debug(`Did NOT find ${repoFile} in repository ${repo.name} with topic ${repoTopic}}`)
             failed = true
@@ -64,7 +71,8 @@ async function main() {
     }
     core.info(`There were ${collectedRepos.length} repositories with topic ${repoTopic} and containing file ${repoFile}}`)
     const crawledObj = {}
-    crawledObj[repoTopic] = collectedRepos
+    //crawledObj[repoTopic] = collectedRepos
+    crawledObj[repoTopic] = collectedModels
     fs.writeFileSync('data.json', JSON.stringify(crawledObj, null, 2))
     await artifactClient.uploadArtifact(repoTopic, ['data.json'], '.', {
         continueOnError: false,
