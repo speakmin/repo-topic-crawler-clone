@@ -58,13 +58,13 @@ async function main() {
             })
             core.info(`Found ${repoFile} in repository ${repo.name} with topic ${repoTopic}}`)
             collectedRepos[repo.name] = yaml.load(Buffer.from(response.content, 'base64').toString())
-            console.log('collectedRepos[repo.name]')
-            console.log(collectedRepos[repo.name])
+            core.info('collectedRepos[repo.name]')
+            core.info(collectedRepos[repo.name])
             //for each model in collectedRepos[repo.name].models, add repo name to model
             for (const model of collectedRepos[repo.name].models) {
                 model.repository = repo.name
-                console.log('model')
-                console.log(model)
+                core.info('model')
+                core.info(model)
                 collectedModels.push(model)
             }
         } catch (e) {
@@ -76,11 +76,11 @@ async function main() {
     core.info(`There were ${collectedRepos.length} repositories with topic ${repoTopic} and containing file ${repoFile}}`)
     const crawledObj = {}
     //crawledObj[repoTopic] = collectedRepos
-    console.log('collectedModels')
-    console.log(collectedModels)
+    core.info('collectedModels')
+    core.info(collectedModels)
     crawledObj[repoTopic].models = collectedModels
-    console.log('crawledObj')
-    console.log(crawledObj)
+    core.info('crawledObj')
+    core.info(crawledObj)
     fs.writeFileSync('data.json', JSON.stringify(crawledObj, null, 2))
     await artifactClient.uploadArtifact(repoTopic, ['data.json'], '.', {
         continueOnError: false,
